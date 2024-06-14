@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@azure/msal-browser": "^3.17.0",
+    "@azure/msal-react": "^2.0.19",
     "@hookform/resolvers": "^3.6.0",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-checkbox": "^1.0.4",

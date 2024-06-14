@@ -4,6 +4,22 @@ export type CustomRequestInit = Omit<RequestInit, "method"> & {
   baseUrl?: string;
 };
 
+class ClientToken {
+  private access_token = "";
+
+  getAccessToken() {
+    return this.access_token;
+  }
+  setAccessToken(access_token: string) {
+    if (typeof window === "undefined") {
+      throw new Error("Cannot set access token on server side");
+    }
+    this.access_token = access_token;
+  }
+}
+
+export const clientToken = new ClientToken();
+
 const request = async <Response>(method: HttpMethod, url: string, options?: CustomRequestInit) => {
   const body = options?.body ? (options.body instanceof FormData ? options.body : JSON.stringify(options.body)) : undefined;
   const baseHeader = options?.body instanceof FormData ? {} : { "Content-Type": "application/json" };
