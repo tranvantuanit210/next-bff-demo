@@ -9,12 +9,18 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/atoms/input";
 import { User } from "@/types/user.type";
 import { Loader2 } from "lucide-react";
+import { Checkbox } from "@/components/atoms/checkbox";
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+  firstName: z.string().min(2, {
+    message: "First name must be at least 2 characters.",
+  }),
+  lastName: z.string().min(2, {
+    message: "Last name must be at least 2 characters.",
   }),
   email: z.string().min(1, { message: "Email is required." }).email({ message: "Invalid email." }),
+  phone: z.string().optional(),
+  isActive: z.boolean(),
 });
 export interface UserFormProps {
   formValue?: User;
@@ -26,8 +32,11 @@ export function UserForm({ formValue, handleSubmit, isLoading }: UserFormProps) 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: formValue?.name || "",
+      firstName: formValue?.firstName || "",
+      lastName: formValue?.lastName || "",
       email: formValue?.email || "",
+      phone: formValue?.phone || "",
+      isActive: formValue?.isActive || false,
     },
   });
 
@@ -41,12 +50,25 @@ export function UserForm({ formValue, handleSubmit, isLoading }: UserFormProps) 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="name"
+          name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>First Name</FormLabel>
               <FormControl>
-                <Input placeholder="Name" {...field} />
+                <Input placeholder="First Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Last Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Last Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -59,12 +81,46 @@ export function UserForm({ formValue, handleSubmit, isLoading }: UserFormProps) 
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="email" {...field} />
+                <Input placeholder="Email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone</FormLabel>
+              <FormControl>
+                <Input placeholder="Phone" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {formValue && (
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} id="isActive" />
+                    <label htmlFor="isActive" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Active
+                    </label>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <Button type="submit" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Submit

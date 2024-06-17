@@ -3,8 +3,10 @@
 import authApis from "@/apis/auth.api";
 import { Button } from "@/components/atoms/button";
 import { useToast } from "@/components/molecules/use-toast";
-import { loginRequest } from "@/config/auth.config";
-import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
+import { authScopes } from "@/config/auth.config";
+import { clientToken } from "@/utils/http";
+import { useMsal } from "@azure/msal-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -12,37 +14,46 @@ export interface LoginProps {}
 
 export default function Login(props: LoginProps) {
   const { instance } = useMsal();
-  const [accountDetails, setAccountDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const { toast } = useToast();
-  const handleLogout = () => {
-    console.log("logout");
-  };
   const handleLogin = () => {
+    setIsLoading(true);
     instance
-      .loginPopup(loginRequest)
+      .loginPopup(authScopes)
       .then(async (res) => {
         await authApis.auth(res.accessToken);
+        clientToken.setAccessToken(res.accessToken);
         toast({
           title: "Success",
           description: "Login successfully!",
         });
         router.push("/");
+        // await fetch("https://graph.microsoft.com/v1.0/me", {
+        //   headers: {
+        //     Authorization: `Bearer ${res.accessToken}`,
+        //   },
+        // })
+        //   .then((res) => {
+        //     console.log(res);
+        //   })
+        //   .catch((err) => {
+        //     console.error(err);
+        //   });
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
   return (
-    <div>
-      <AuthenticatedTemplate>
-        <p>You're logged in!</p>
-        <Button onClick={handleLogout}>Logout</Button>
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
-        <p>Please log in!</p>
-        <Button onClick={handleLogin}>Login</Button>
-      </UnauthenticatedTemplate>
+    <div className="min-h-[100vh] flex justify-center items-center flex-col gap-4">
+      <p>Demo BFF App</p>
+      <Button disabled={isLoading} onClick={handleLogin}>
+        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Login
+      </Button>
     </div>
   );
 }

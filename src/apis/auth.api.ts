@@ -9,6 +9,8 @@ const authApis = {
         baseUrl: "",
       }
     ),
+
+  logout: () => http.get<{ message: string }>("/api/auth/logout", { baseUrl: "" }),
 };
 
 export default authApis;

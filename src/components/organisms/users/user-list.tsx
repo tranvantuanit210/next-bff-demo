@@ -20,9 +20,11 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Input } from "@/components/atoms/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/molecules/table";
 import { User } from "@/types/user.type";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import UserDialog from "./user-dialog";
 import UserDialogConfirm from "./user-dialog-confirm";
+import { clientToken } from "@/utils/http";
+import { useRouter } from "next/navigation";
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -39,9 +41,14 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    accessorKey: "firstName",
+    header: "First Name",
+    cell: ({ row }) => <div>{row.getValue("firstName")}</div>,
+  },
+  {
+    accessorKey: "lastName",
+    header: "Last Name",
+    cell: ({ row }) => <div>{row.getValue("lastName")}</div>,
   },
   {
     accessorKey: "email",
@@ -55,6 +62,16 @@ export const columns: ColumnDef<User>[] = [
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
+  {
+    accessorKey: "phone",
+    header: "Phone",
+    cell: ({ row }) => <div>{row.getValue("phone")}</div>,
+  },
+  {
+    accessorKey: "isActive",
+    header: "Status",
+    cell: ({ row }) => <div>{row.getValue("isActive") ? "Active" : "Unactive"}</div>,
+  },
 ];
 
 export function UserList({ data }: { data: User[] }) {
@@ -65,8 +82,10 @@ export function UserList({ data }: { data: User[] }) {
   const [openDialogUser, setOpenDialogUser] = useState<boolean>(false);
   const [openDialogUserConfirm, setOpenDialogUserConfirm] = useState<boolean>(false);
   const [userSelected, setUserSelected] = useState<User | undefined>(undefined);
+  const router = useRouter();
 
-  const handleMutationUser = (user?: User) => {
+  const handleMutationUser = (event: MouseEvent<HTMLElement, globalThis.MouseEvent>, user?: User) => {
+    event.stopPropagation();
     if (user) {
       setUserSelected(user);
     } else {
@@ -75,7 +94,8 @@ export function UserList({ data }: { data: User[] }) {
     setOpenDialogUser(true);
   };
 
-  const handleDeleteUser = (user: User) => {
+  const handleDeleteUser = (event: MouseEvent<HTMLElement, globalThis.MouseEvent>, user: User) => {
+    event.stopPropagation();
     if (user) {
       setUserSelected(user);
     } else {
@@ -91,10 +111,10 @@ export function UserList({ data }: { data: User[] }) {
     cell: ({ row }) => {
       return (
         <ul className="flex items-center gap-4 justify-end">
-          <li className="cursor-pointer" onClick={() => handleMutationUser(row.original)}>
+          <li className="cursor-pointer" onClick={(event) => handleMutationUser(event, row.original)}>
             <Pencil />
           </li>
-          <li className="cursor-pointer" onClick={() => handleDeleteUser(row.original)}>
+          <li className="cursor-pointer" onClick={(event) => handleDeleteUser(event, row.original)}>
             <Trash2 />
           </li>
         </ul>
@@ -120,6 +140,10 @@ export function UserList({ data }: { data: User[] }) {
       rowSelection,
     },
   });
+
+  const handleSeenDetails = (id: string) => {
+    router.push(`/users/${id}`);
+  };
 
   return (
     <div className="w-full">
@@ -158,7 +182,7 @@ export function UserList({ data }: { data: User[] }) {
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button onClick={() => handleMutationUser()}>Create</Button>
+          <Button onClick={(event) => handleMutationUser(event)}>Create</Button>
         </div>
       </div>
       <div className="rounded-md border">
@@ -179,7 +203,7 @@ export function UserList({ data }: { data: User[] }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} onClick={() => handleSeenDetails(row.original.id)}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}

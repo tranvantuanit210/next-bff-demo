@@ -8,10 +8,10 @@ const authUrls = ["/login", "/register"];
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const accessToken = request.cookies.get("accessToken");
-  if (authUrls.includes(pathname) && accessToken) {
+  if (authUrls.includes(pathname) && accessToken?.value) {
     return NextResponse.redirect(new URL("/", request.url));
   }
-  if (privateUrls.includes(pathname) && !accessToken) {
+  if (privateUrls.includes(pathname) && !accessToken?.value) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 }

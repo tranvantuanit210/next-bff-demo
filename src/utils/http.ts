@@ -5,16 +5,16 @@ export type CustomRequestInit = Omit<RequestInit, "method"> & {
 };
 
 class ClientToken {
-  private access_token = "";
+  private accessToken = "";
 
   getAccessToken() {
-    return this.access_token;
+    return this.accessToken;
   }
-  setAccessToken(access_token: string) {
+  setAccessToken(accessToken: string) {
     if (typeof window === "undefined") {
       throw new Error("Cannot set access token on server side");
     }
-    this.access_token = access_token;
+    this.accessToken = accessToken;
   }
 }
 
