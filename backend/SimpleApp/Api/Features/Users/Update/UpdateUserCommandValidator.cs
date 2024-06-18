@@ -11,6 +11,6 @@ internal sealed class UpdateUserCommandValidator : AbstractValidator<UpdateUserC
         RuleFor(x => x.Request.FirstName).NotEmpty();
         RuleFor(x => x.Request.LastName).NotEmpty();
         RuleFor(x => x.Request.Email).NotEmpty().EmailAddress();
-        RuleFor(x => x.Request.Phone).Must(x => x is null || Regex.IsMatch(x, GlobalConstants.PhoneRegex));
+        RuleFor(x => x.Request.Phone).NotEmpty();
     }
 }

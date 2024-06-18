@@ -1,10 +1,9 @@
 export const msalConfig = {
   auth: {
     clientId: process.env.NEXT_PUBLIC_CLIENT_ID || "",
-    authority: "https://login.microsoftonline.com/common",
-    redirectUri: "http://localhost:3000/",
-    postLogoutRedirectUri: "http://localhost:3000/login",
-    navigateToLoginRequestUrl: false,
+    authority: process.env.NEXT_PUBLIC_AUTHORITY || "",
+    redirectUri: process.env.NEXT_PUBLIC_BASE_URL_NEXT_SERVER || "",
+    knownAuthorities: [new URL(process.env.NEXT_PUBLIC_AUTHORITY || "").host],
   },
   cache: {
     cacheLocation: "sessionStorage",
@@ -13,5 +12,5 @@ export const msalConfig = {
 };
 
 export const authScopes = {
-  scopes: [process.env.NEXT_PUBLIC_SCOPES || ""],
+  scopes: ["offline_access", "openid", process.env.NEXT_PUBLIC_SCOPES || ""],
 };

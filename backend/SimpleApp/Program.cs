@@ -25,11 +25,6 @@ builder.AddMediaR();
 builder.ConfigureAuth();
 builder.Services.AddDatabase(builder.Configuration);
 
-// Add services to the container.
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAdB2C"));
-builder.Services.AddAuthorization();
-
 builder.Services.AddEndpoints();
 
 var app = builder.Build();

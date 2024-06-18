@@ -31,7 +31,7 @@ public class EndpointBuilder :IEndpointBuilder
         {
             var result = await mediator.Send(query, cancellationToken);
             return result.ToHttpResult();
-        });
+        }).RequireAuthorization();
         
         routeBuilder.MapPut("users/{userId}", async (
             IMediator mediator,
@@ -41,7 +41,7 @@ public class EndpointBuilder :IEndpointBuilder
         {
             var result = await mediator.Send(command, cancellationToken);
             return result.ToHttpResult();
-        });
+        }).RequireAuthorization();
         
         routeBuilder.MapPost("users", async (
             IMediator mediator,
@@ -51,7 +51,7 @@ public class EndpointBuilder :IEndpointBuilder
         {
             var result = await mediator.Send(command, cancellationToken);
             return result.ToHttpResult();
-        });
+        }).RequireAuthorization();
         
         routeBuilder.MapDelete("users/{userId}", async (
             IMediator mediator,
@@ -61,6 +61,6 @@ public class EndpointBuilder :IEndpointBuilder
         {
             var result = await mediator.Send(command, cancellationToken);
             return result.ToHttpResult();
-        });
+        }).RequireAuthorization();
     }
 }

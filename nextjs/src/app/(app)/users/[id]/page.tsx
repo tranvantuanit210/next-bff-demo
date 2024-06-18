@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import userApis from "@/services/user.service";
 import Link from "next/link";
 import { User } from "@/types/user.type";
+import { cookies } from "next/headers";
 
 export interface UserDetailsProps {
   params: {
@@ -12,7 +13,9 @@ export interface UserDetailsProps {
 }
 
 export default async function UserDetails({ params: { id } }: UserDetailsProps) {
-  const data = await userApis.getUserDetails(id);
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value || "";
+  const data = await userApis.getUserDetails(accessToken, id);
   const user = data.data;
   return (
     <div className="flex justify-center items-center min-h-screen">

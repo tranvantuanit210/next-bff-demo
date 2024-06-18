@@ -14,6 +14,8 @@ export function middleware(request: NextRequest) {
   if (privateUrls.includes(pathname) && !accessToken?.value) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
+
+  return NextResponse.next();
 }
 
 // See "Matching Paths" below to learn more

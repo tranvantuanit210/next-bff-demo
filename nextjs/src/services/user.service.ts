@@ -4,31 +4,75 @@ import http from "@/utils/http";
 import { omit } from "lodash";
 
 const userApis = {
-  getUsers: ({ page, pageSize }: Pagination) =>
+  getUsers: (accessToken: string, { page, pageSize }: Pagination) =>
     http.get<SuccessResponse<SuccessResponseFromBE<User[]>>>(`/api/users?page=${page}&pageSize=${pageSize}`, {
       baseUrl: "",
       cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     }),
-  getUsersFromNextServer: ({ page, pageSize }: Pagination) =>
-    http.get<SuccessResponseFromBE<User[]>>(`/users?page=${page}&pageSize=${pageSize}`, { cache: "no-store" }),
+  getUsersFromNextServer: (accessToken: string, { page, pageSize }: Pagination) =>
+    http.get<SuccessResponseFromBE<User[]>>(`/users?page=${page}&pageSize=${pageSize}`, {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }),
 
-  getUserDetails: (id: string) => http.get<SuccessResponse<User>>(`/api/users/${id}`, { baseUrl: "", cache: "no-store" }),
-  getUserDetailsFromNextServer: (id: string) => http.get<User>(`/users/${id}`, { cache: "no-store" }),
+  getUserDetails: (accessToken: string, id: string) =>
+    http.get<SuccessResponse<User>>(`/api/users/${id}`, {
+      baseUrl: "",
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }),
+  getUserDetailsFromNextServer: (accessToken: string, id: string) =>
+    http.get<User>(`/users/${id}`, {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }),
 
   createUser: (user: User) =>
     http.post<SuccessResponse<{ userId: string }>>("/api/users", user, {
       baseUrl: "",
     }),
-  createUserFromNextServer: (user: User) => http.post<{ userId: string }>("/users", omit(user, ["id", "isActive"])),
+  createUserFromNextServer: (accessToken: string, user: User) =>
+    http.post<{ userId: string }>("/users", omit(user, ["id", "isActive"]), {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }),
 
   updateUser: (user: User) =>
     http.put<SuccessResponse<User>>("/api/users", user, {
       baseUrl: "",
     }),
-  updateUserFromNextServer: (user: User) => http.put<User>(`/users/${user.id}`, { ...omit(user, ["id"]), userId: user.id }),
+  updateUserFromNextServer: (accessToken: string, user: User) =>
+    http.put<User>(
+      `/users/${user.id}`,
+      { ...omit(user, ["id"]), userId: user.id },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    ),
 
   deleteUser: (id: string) => http.delete<SuccessResponse<{ userId: string }>>(`/api/users/${id}`, {}, { baseUrl: "" }),
-  deleteUserFromNextServer: (id: string) => http.delete<{ userId: string }>(`/users/${id}`),
+  deleteUserFromNextServer: (accessToken: string, id: string) =>
+    http.delete<{ userId: string }>(
+      `/users/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    ),
 };
 
 export default userApis;
