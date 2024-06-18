@@ -1,0 +1,40 @@
+backend/SimpleApp/bin/
+backend/SimpleApp/obj/
+backend/.idea/
+
+# dependencies
+nextjs/node_modules
+nextjs/.pnp
+nextjs/.pnp.js
+nextjs/.yarn/install-state.gz
+
+# testing
+nextjs/coverage
+
+# next.js
+nextjs/.next/
+nextjs/out/
+
+# production
+nextjs/build
+
+# misc
+nextjs/.DS_Store
+nextjs/*.pem
+
+# debug
+nextjs/npm-debug.log*
+nextjs/yarn-debug.log*
+nextjs/yarn-error.log*
+
+# local env files
+nextjs/.env
+nextjs/.env*.local
+
+
+# vercel
+nextjs/.vercel
+
+# typescript
+nextjs/*.tsbuildinfo
+nextjs/next-env.d.ts
