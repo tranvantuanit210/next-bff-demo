@@ -3,6 +3,34 @@ import { HttpMethod } from "@/types/common.type";
 export type CustomRequestInit = Omit<RequestInit, "method"> & {
   baseUrl?: string;
 };
+export class HttpError extends Error {
+  type: string;
+  title: string;
+  status: number;
+  constructor(payload: { type: string; title: string; status: number }) {
+    super("Http Error");
+    this.type = payload.type;
+    this.title = payload.title;
+    this.status = payload.status;
+  }
+}
+export class CommonError extends HttpError {
+  genericErrors: string[];
+  constructor(payload: { type: string; title: string; status: number; genericErrors: string[] }) {
+    super({ type: payload.type, title: payload.title, status: payload.status });
+    this.genericErrors = payload.genericErrors;
+  }
+}
+export type EntityErrorType = {
+  [p: string]: string[];
+};
+export class EntityError extends HttpError {
+  validationErrors: EntityErrorType;
+  constructor(payload: { type: string; title: string; status: 422; validationErrors: EntityErrorType }) {
+    super({ type: payload.type, title: payload.title, status: payload.status });
+    this.validationErrors = payload.validationErrors;
+  }
+}
 
 class ClientToken {
   private accessToken = "";
@@ -38,9 +66,11 @@ const request = async <Response>(method: HttpMethod, url: string, options?: Cust
 
   const data: Response = await res.json();
   if (!res.ok) {
-    throw new Error(JSON.stringify(data));
+    if (res.status === 422 && Object.keys(data as any).includes("validationErrors")) {
+      throw new EntityError(data as any);
+    }
+    throw new CommonError(data as any);
   }
-
   return data;
 };
 

@@ -1,4 +1,4 @@
-import userApis from "@/apis/user.api";
+import userApis from "@/services/user.service";
 import {
   AlertDialog,
   AlertDialogAction,

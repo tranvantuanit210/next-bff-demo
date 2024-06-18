@@ -1,4 +1,5 @@
 import { toast } from "@/components/molecules/use-toast";
+import { CommonError, EntityError } from "@/utils/http";
 import { type ClassValue, clsx } from "clsx";
 import { UseFormSetError } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
@@ -8,22 +9,35 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const handleErrorApi = (error: any, setError?: UseFormSetError<any>, duration?: number) => {
-  if (error?.status === 422 && setError) {
-    const errors = error.payload.errors;
+  if (error instanceof EntityError && setError) {
+    const errors = error.validationErrors;
     Object.keys(errors).forEach((key) => {
       setError(key, {
         type: "server",
-        message: errors[key].msg,
+        message: errors[key][0],
       });
+    });
+  } else if (error instanceof CommonError) {
+    toast({
+      title: "Error",
+      description: error.genericErrors[0],
+      variant: "destructive",
+      duration: duration || 5000,
     });
   } else {
     toast({
       title: "Error",
-      description: error?.payload?.message || "Something went wrong",
+      description: error?.message || "Something went wrong",
       variant: "destructive",
       duration: duration || 5000,
     });
   }
+};
+
+export const handleErrorNextServer = (error: any) => {
+  return Response.json(error, {
+    status: error.status || 500,
+  });
 };
 
 export const toPascalCase = (input: string) => {

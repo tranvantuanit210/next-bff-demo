@@ -1,26 +1,9 @@
-import { BellRing, Check } from "lucide-react";
-
-import { cn, toPascalCase } from "@/lib/utils";
+import { toPascalCase } from "@/lib/utils";
 import { Button } from "@/components/atoms/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/molecules/card";
-import userApis from "@/apis/user.api";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/molecules/card";
+import userApis from "@/services/user.service";
 import Link from "next/link";
 import { User } from "@/types/user.type";
-
-const notifications = [
-  {
-    title: "Your call has been confirmed.",
-    description: "1 hour ago",
-  },
-  {
-    title: "You have a new message!",
-    description: "1 hour ago",
-  },
-  {
-    title: "Your subscription is expiring soon!",
-    description: "2 hours ago",
-  },
-];
 
 export interface UserDetailsProps {
   params: {

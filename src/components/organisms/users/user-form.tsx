@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { UseFormSetError, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/atoms/button";
@@ -24,7 +24,7 @@ const formSchema = z.object({
 });
 export interface UserFormProps {
   formValue?: User;
-  handleSubmit: (user: User) => Promise<void>;
+  handleSubmit: (data: User, setError?: UseFormSetError<any>) => Promise<void>;
   isLoading: boolean;
 }
 export function UserForm({ formValue, handleSubmit, isLoading }: UserFormProps) {
@@ -42,7 +42,7 @@ export function UserForm({ formValue, handleSubmit, isLoading }: UserFormProps) 
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    handleSubmit && handleSubmit({ ...values, id: formValue?.id as string });
+    handleSubmit && handleSubmit({ ...values, id: formValue?.id as string }, form.setError);
   }
 
   return (

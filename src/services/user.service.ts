@@ -27,8 +27,8 @@ const userApis = {
     }),
   updateUserFromNextServer: (user: User) => http.put<User>(`/users/${user.id}`, { ...omit(user, ["id"]), userId: user.id }),
 
-  deleteUser: (id: string) => http.delete<SuccessResponse<User>>("/api/users", { id }, { baseUrl: "" }),
-  deleteUserFromNextServer: (id: string) => http.delete<User>(`/users/${id}`),
+  deleteUser: (id: string) => http.delete<SuccessResponse<{ userId: string }>>(`/api/users/${id}`, {}, { baseUrl: "" }),
+  deleteUserFromNextServer: (id: string) => http.delete<{ userId: string }>(`/users/${id}`),
 };
 
 export default userApis;

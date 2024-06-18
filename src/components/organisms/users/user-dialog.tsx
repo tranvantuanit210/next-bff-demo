@@ -1,11 +1,12 @@
 import { User } from "@/types/user.type";
 import { DialogContent, DialogHeader, DialogTitle, Dialog } from "@/components/molecules/dialog";
-import userApis from "@/apis/user.api";
+import userApis from "@/services/user.service";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useToast } from "../../molecules/use-toast";
 import { handleErrorApi } from "@/lib/utils";
 import { UserForm } from "./user-form";
 import { useRouter } from "next/navigation";
+import { UseFormSetError } from "react-hook-form";
 
 export interface UserDialogProps {
   user?: User;
@@ -17,7 +18,7 @@ export default function UserDialog({ user, open = false, setOpen }: UserDialogPr
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const { toast } = useToast();
-  const handleEdit = async (data: User) => {
+  const handleEdit = async (data: User, setError?: UseFormSetError<any>) => {
     setIsLoading(true);
     if (user) {
       await userApis
@@ -31,6 +32,7 @@ export default function UserDialog({ user, open = false, setOpen }: UserDialogPr
           router.refresh();
         })
         .catch((error: any) => {
+          console.log(error);
           handleErrorApi(error);
         })
         .finally(() => {
@@ -48,7 +50,7 @@ export default function UserDialog({ user, open = false, setOpen }: UserDialogPr
           router.refresh();
         })
         .catch((error: any) => {
-          handleErrorApi(error);
+          handleErrorApi(error, setError);
         })
         .finally(() => {
           setIsLoading(false);

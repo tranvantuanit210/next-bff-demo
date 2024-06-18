@@ -1,4 +1,4 @@
-import userApis from "@/apis/user.api";
+import userApis from "@/services/user.service";
 import { UserList } from "@/components/organisms/users/user-list";
 import HomeTemplate from "@/components/templates/home-template";
 

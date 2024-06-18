@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
-import authApis from "@/apis/auth.api";
+import authApis from "@/services/auth.service";
 import { Button } from "@/components/atoms/button";
 import { useToast } from "@/components/molecules/use-toast";
 import { authScopes } from "@/config/auth.config";

@@ -1,3 +1,5 @@
+import { handleErrorNextServer } from "@/lib/utils";
+
 export async function POST(request: Request) {
   const body = await request.json();
   const accessToken = body.accessToken;
@@ -13,8 +15,6 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    return Response.json(error, {
-      status: 500,
-    });
+    return handleErrorNextServer(error);
   }
 }
