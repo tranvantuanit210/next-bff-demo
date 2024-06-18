@@ -64,7 +64,7 @@ export default function UserDialog({ user, open = false, setOpen }: UserDialogPr
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]" onOpenAutoFocus={handleOpenAutoFocus}>
         <DialogHeader>
-          <DialogTitle>{user ? "Update User" : "Edit User"}</DialogTitle>
+          <DialogTitle>{user ? "Update User" : "Add User"}</DialogTitle>
         </DialogHeader>
         <UserForm handleSubmit={handleEdit} formValue={user} isLoading={isLoading} />
       </DialogContent>
