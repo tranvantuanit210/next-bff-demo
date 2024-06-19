@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@/types/user.type";
+import { User } from "@/app/(app)/users/types/user.type";
 import { clientToken } from "@/utils/http";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
 

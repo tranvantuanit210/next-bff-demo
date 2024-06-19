@@ -1,4 +1,3 @@
-import userApis from "@/services/user.service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +13,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useToast } from "@/components/molecules/use-toast";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import userServices from "@/app/(app)/users/services/user.service";
 
 export interface UserDialogConfirmProps {
   userId: string;
@@ -35,7 +35,7 @@ export default function UserDialogConfirm({ open, setOpen, userId }: UserDialogC
   const handleConfirmDeleteUser = async () => {
     if (userId) {
       setIsLoading(true);
-      await userApis
+      await userServices
         .deleteUser(userId)
         .then((res) => {
           toast({

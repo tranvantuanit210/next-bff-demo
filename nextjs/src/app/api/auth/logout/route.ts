@@ -1,11 +1,7 @@
+import { cookies } from "next/headers";
+
 export async function GET() {
-  return Response.json(
-    { message: "Logout successfully!" },
-    {
-      status: 200,
-      headers: {
-        "Set-cookie": `accessToken=; HttpOnly; Path=/; SameSite=Lax;`,
-      },
-    }
-  );
+  const cookieStore = cookies();
+  cookieStore.delete("accessToken");
+  return Response.json({ message: "Logout successfully!" });
 }

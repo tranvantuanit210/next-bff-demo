@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/atoms/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/molecules/form";
 import { Input } from "@/components/atoms/input";
-import { User } from "@/types/user.type";
+import { User } from "@/app/(app)/users/types/user.type";
 import { Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/atoms/checkbox";
 

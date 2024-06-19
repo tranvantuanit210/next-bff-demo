@@ -19,7 +19,7 @@ import { Checkbox } from "@/components/atoms/checkbox";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/molecules/dropdown-menu";
 import { Input } from "@/components/atoms/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/molecules/table";
-import { User } from "@/types/user.type";
+import { User } from "@/app/(app)/users/types/user.type";
 import { MouseEvent, useState } from "react";
 import UserDialog from "./user-dialog";
 import UserDialogConfirm from "./user-dialog-confirm";

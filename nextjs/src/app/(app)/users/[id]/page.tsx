@@ -1,10 +1,10 @@
 import { toPascalCase } from "@/lib/utils";
 import { Button } from "@/components/atoms/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/molecules/card";
-import userApis from "@/services/user.service";
 import Link from "next/link";
-import { User } from "@/types/user.type";
+import { User } from "@/app/(app)/users/types/user.type";
 import { cookies } from "next/headers";
+import userServices from "../services/user.service";
 
 export interface UserDetailsProps {
   params: {
@@ -15,7 +15,7 @@ export interface UserDetailsProps {
 export default async function UserDetails({ params: { id } }: UserDetailsProps) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken")?.value || "";
-  const data = await userApis.getUserDetails(accessToken, id);
+  const data = await userServices.getUserDetails(accessToken, id);
   const user = data.data;
   return (
     <div className="flex justify-center items-center min-h-screen">

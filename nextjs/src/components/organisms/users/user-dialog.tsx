@@ -1,12 +1,12 @@
-import { User } from "@/types/user.type";
+import { User } from "@/app/(app)/users/types/user.type";
 import { DialogContent, DialogHeader, DialogTitle, Dialog } from "@/components/molecules/dialog";
-import userApis from "@/services/user.service";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useToast } from "../../molecules/use-toast";
 import { handleErrorApi } from "@/lib/utils";
 import { UserForm } from "./user-form";
 import { useRouter } from "next/navigation";
 import { UseFormSetError } from "react-hook-form";
+import userServices from "@/app/(app)/users/services/user.service";
 
 export interface UserDialogProps {
   user?: User;
@@ -21,7 +21,7 @@ export default function UserDialog({ user, open = false, setOpen }: UserDialogPr
   const handleEdit = async (data: User, setError?: UseFormSetError<any>) => {
     setIsLoading(true);
     if (user) {
-      await userApis
+      await userServices
         .updateUser(data)
         .then((res) => {
           toast({
@@ -39,7 +39,7 @@ export default function UserDialog({ user, open = false, setOpen }: UserDialogPr
           setIsLoading(false);
         });
     } else {
-      await userApis
+      await userServices
         .createUser(data)
         .then((res) => {
           toast({

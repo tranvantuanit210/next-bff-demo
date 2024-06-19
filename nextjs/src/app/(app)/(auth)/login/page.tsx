@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
-import authApis from "@/services/auth.service";
 import { Button } from "@/components/atoms/button";
 import { useToast } from "@/components/molecules/use-toast";
 import { authScopes } from "@/config/auth.config";
@@ -9,6 +8,7 @@ import { useMsal } from "@azure/msal-react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import authBffServices from "../services/auth.bff.service";
 
 export interface LoginProps {}
 
@@ -22,7 +22,7 @@ export default function Login(props: LoginProps) {
     instance
       .loginPopup(authScopes)
       .then(async (res) => {
-        await authApis.auth(res.accessToken);
+        await authBffServices.auth(res.accessToken);
         clientToken.setAccessToken(res.accessToken);
         toast({
           title: "Success",

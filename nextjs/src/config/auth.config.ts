@@ -1,4 +1,6 @@
-export const msalConfig = {
+import { Configuration, PublicClientApplication } from "@azure/msal-browser";
+
+export const msalConfig: Configuration = {
   auth: {
     clientId: process.env.NEXT_PUBLIC_CLIENT_ID || "",
     authority: process.env.NEXT_PUBLIC_AUTHORITY || "",
@@ -14,3 +16,6 @@ export const msalConfig = {
 export const authScopes = {
   scopes: ["offline_access", "openid", process.env.NEXT_PUBLIC_SCOPES || ""],
 };
+
+
+export const msalInstance = new PublicClientApplication(msalConfig);

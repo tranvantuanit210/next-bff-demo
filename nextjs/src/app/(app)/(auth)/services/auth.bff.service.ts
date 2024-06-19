@@ -1,6 +1,6 @@
 import http from "@/utils/http";
 
-const authApis = {
+const authBffServices = {
   auth: (accessToken: string) =>
     http.post(
       "/api/auth",
@@ -13,4 +13,4 @@ const authApis = {
   logout: () => http.get<{ message: string }>("/api/auth/logout", { baseUrl: "" }),
 };
 
-export default authApis;
+export default authBffServices;

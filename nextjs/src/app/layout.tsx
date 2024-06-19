@@ -6,7 +6,7 @@ import { Toaster } from "@/components/molecules/toaster";
 import { cn } from "@/lib/utils";
 import AppProvider from "@/provider/app.provider";
 import { cookies } from "next/headers";
-import { User } from "@/types/user.type";
+import { User } from "@/app/(app)/users/types/user.type";
 
 const fontSans = FontSans({
   subsets: ["latin"],

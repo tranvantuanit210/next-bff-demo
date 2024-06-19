@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { handleErrorNextServer } from "@/lib/utils";
 
 export async function POST(request: Request) {
@@ -8,12 +9,14 @@ export async function POST(request: Request) {
     return Response.json({ message: "Invalid token" });
   }
   try {
-    return Response.json(body, {
-      status: 200,
-      headers: {
-        "Set-cookie": `accessToken=${accessToken}; HttpOnly; Path=/; SameSite=Lax;`,
-      },
+    const cookieStore = cookies();
+    cookieStore.set("accessToken", accessToken, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      secure: true,
     });
+    return Response.json(body);
   } catch (error) {
     return handleErrorNextServer(error);
   }

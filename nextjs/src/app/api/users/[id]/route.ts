@@ -1,12 +1,11 @@
-import userApis from "@/services/user.service";
 import { handleErrorNextServer } from "@/lib/utils";
-import { cookies, headers } from "next/headers";
+import { getAccessTokenFromCookie, getAccessTokenFromHeader } from "@/app/utils/utils";
+import userBffServices from "@/app/(app)/users/services/user.bff.service";
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const headersList = headers();
-  const accessToken = headersList.get("Authorization")?.split("Bearer ")[1] || "";
+  const accessToken = getAccessTokenFromHeader();
   try {
-    const res = await userApis.getUserDetailsFromNextServer(accessToken, params.id);
+    const res = await userBffServices.getUserDetails(accessToken, params.id);
     return Response.json({ message: "Get users successfully!", data: res });
   } catch (error) {
     return handleErrorNextServer(error);
@@ -14,10 +13,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
 }
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  const cookieStore = cookies();
-  const accessToken = cookieStore.get("accessToken")?.value || "";
+  const accessToken = getAccessTokenFromCookie();
   try {
-    const res = await userApis.deleteUserFromNextServer(accessToken, params.id);
+    const res = await userBffServices.deleteUser(accessToken, params.id);
     return Response.json({ message: "Delete users successfully!", data: res });
   } catch (error) {
     return handleErrorNextServer(error);
