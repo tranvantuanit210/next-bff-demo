@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import Link from "next/link";
 import { User } from "@/app/(app)/users/types/user.type";
 import { cookies } from "next/headers";
-import userServices from "../services/user.service";
+import userServices from "../services/user.bff.service";
 
 export interface UserDetailsProps {
   params: {

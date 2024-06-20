@@ -6,7 +6,7 @@ import { handleErrorApi } from "@/lib/utils";
 import { UserForm } from "./user-form";
 import { useRouter } from "next/navigation";
 import { UseFormSetError } from "react-hook-form";
-import userServices from "@/app/(app)/users/services/user.service";
+import userBffServices from "@/app/(app)/users/services/user.bff.service";
 
 export interface UserDialogProps {
   user?: User;
@@ -21,7 +21,7 @@ export default function UserDialog({ user, open = false, setOpen }: UserDialogPr
   const handleEdit = async (data: User, setError?: UseFormSetError<any>) => {
     setIsLoading(true);
     if (user) {
-      await userServices
+      await userBffServices
         .updateUser(data)
         .then((res) => {
           toast({
@@ -39,7 +39,7 @@ export default function UserDialog({ user, open = false, setOpen }: UserDialogPr
           setIsLoading(false);
         });
     } else {
-      await userServices
+      await userBffServices
         .createUser(data)
         .then((res) => {
           toast({

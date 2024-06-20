@@ -1,7 +1,7 @@
 import { UserList } from "@/components/organisms/users/user-list";
 import HomeTemplate from "@/components/templates/home-template";
 import { cookies } from "next/headers";
-import userServices from "./users/services/user.service";
+import userServices from "./users/services/user.bff.service";
 
 export interface HomePageProps {}
 

@@ -13,7 +13,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useToast } from "@/components/molecules/use-toast";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import userServices from "@/app/(app)/users/services/user.service";
+import userBffServices from "@/app/(app)/users/services/user.bff.service";
 
 export interface UserDialogConfirmProps {
   userId: string;
@@ -35,7 +35,7 @@ export default function UserDialogConfirm({ open, setOpen, userId }: UserDialogC
   const handleConfirmDeleteUser = async () => {
     if (userId) {
       setIsLoading(true);
-      await userServices
+      await userBffServices
         .deleteUser(userId)
         .then((res) => {
           toast({
