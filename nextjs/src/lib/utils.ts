@@ -36,7 +36,7 @@ export const handleErrorApi = (error: any, setError?: UseFormSetError<any>, dura
 
 export const handleErrorNextServer = (error: any) => {
   return Response.json(error, {
-    status: error.status || 500,
+    status: error.status || 401,
   });
 };
 

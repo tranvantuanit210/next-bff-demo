@@ -3,7 +3,7 @@ import { User } from "@/app/(app)/users/types/user.type";
 import http from "@/utils/http";
 import { omit } from "lodash";
 
-const userBffServices = {
+const userBeServices = {
   getUsers: (accessToken: string, { page, pageSize }: Pagination) =>
     http.get<SuccessResponseFromBE<User[]>>(`/users?page=${page}&pageSize=${pageSize}`, {
       cache: "no-store",
@@ -38,16 +38,7 @@ const userBffServices = {
       }
     ),
 
-  deleteUser: (accessToken: string, id: string) =>
-    http.delete<{ userId: string }>(
-      `/users/${id}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    ),
+  deleteUser: (id: string) => http.delete<{ userId: string }>(`/users/${id}`),
 };
 
-export default userBffServices;
+export default userBeServices;

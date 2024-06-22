@@ -2,7 +2,7 @@ import { Pagination, SuccessResponse, SuccessResponseFromBE } from "@/types/comm
 import { User } from "@/app/(app)/users/types/user.type";
 import http from "@/utils/http";
 
-const userServices = {
+const userBffServices = {
   getUsers: (accessToken: string, { page, pageSize }: Pagination) =>
     http.get<SuccessResponse<SuccessResponseFromBE<User[]>>>(`/api/users?page=${page}&pageSize=${pageSize}`, {
       baseUrl: "",
@@ -34,4 +34,4 @@ const userServices = {
   deleteUser: (id: string) => http.delete<SuccessResponse<{ userId: string }>>(`/api/users/${id}`, {}, { baseUrl: "" }),
 };
 
-export default userServices;
+export default userBffServices;

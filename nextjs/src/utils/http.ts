@@ -1,4 +1,9 @@
+import authBffServices from "@/app/(app)/(auth)/services/auth.bff.service";
+import { toast } from "@/components/molecules/use-toast";
+import { msalInstance } from "@/config/auth.config";
+import { httpStatusCode } from "@/constants/httpStatusCode";
 import { HttpMethod } from "@/types/common.type";
+import { redirect } from "next/navigation";
 
 export type CustomRequestInit = Omit<RequestInit, "method"> & {
   baseUrl?: string;
@@ -48,6 +53,8 @@ class ClientToken {
 
 export const clientToken = new ClientToken();
 
+let clientLogoutRequest: null | Promise<any> = null;
+
 const request = async <Response>(method: HttpMethod, url: string, options?: CustomRequestInit) => {
   const body = options?.body ? (options.body instanceof FormData ? options.body : JSON.stringify(options.body)) : undefined;
   const baseHeader = options?.body instanceof FormData ? {} : { "Content-Type": "application/json" };
@@ -63,11 +70,24 @@ const request = async <Response>(method: HttpMethod, url: string, options?: Cust
     method,
     body,
   });
-
   const data: Response = await res.json();
   if (!res.ok) {
-    if (res.status === 422 && Object.keys(data as any).includes("validationErrors")) {
+    if (res.status === httpStatusCode.UNPROCESSABLE_ENTITY && Object.keys(data as any).includes("validationErrors")) {
       throw new EntityError(data as any);
+    } else if (res.status === httpStatusCode.UNAUTHORIZED) {
+      if (typeof window !== "undefined") {
+        if (!clientLogoutRequest) {
+          await msalInstance.logoutRedirect({
+            account: msalInstance.getActiveAccount(),
+          });
+          clientLogoutRequest = authBffServices.logout();
+          await clientLogoutRequest;
+          clientLogoutRequest = null;
+        }
+      } else {
+        const accessToken = (options?.headers as any).Authorization.split("Bearer ")[1];
+        redirect(`/logout?accessToken=${accessToken}`);
+      }
     }
     throw new CommonError(data as any);
   }

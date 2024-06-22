@@ -7,16 +7,23 @@ import { clientToken } from "@/utils/http";
 import { useMsal } from "@azure/msal-react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import authBffServices from "../services/auth.bff.service";
+import { path } from "@/constants/path";
 
 export interface LoginProps {}
 
 export default function Login(props: LoginProps) {
-  const { instance } = useMsal();
+  const { instance, accounts } = useMsal();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (accounts.length > 0) {
+      instance.setActiveAccount(accounts[0]);
+    }
+  }, [accounts, instance]);
   const handleLogin = () => {
     setIsLoading(true);
     instance
@@ -28,7 +35,7 @@ export default function Login(props: LoginProps) {
           title: "Success",
           description: "Login successfully!",
         });
-        router.push("/");
+        router.push(path.home);
         // await fetch("https://graph.microsoft.com/v1.0/me", {
         //   headers: {
         //     Authorization: `Bearer ${res.accessToken}`,

@@ -6,6 +6,7 @@ export const msalConfig: Configuration = {
     authority: process.env.NEXT_PUBLIC_AUTHORITY || "",
     redirectUri: process.env.NEXT_PUBLIC_BASE_URL_NEXT_SERVER || "",
     knownAuthorities: [new URL(process.env.NEXT_PUBLIC_AUTHORITY || "").host],
+    navigateToLoginRequestUrl: false,
   },
   cache: {
     cacheLocation: "sessionStorage",
@@ -16,6 +17,5 @@ export const msalConfig: Configuration = {
 export const authScopes = {
   scopes: ["offline_access", "openid", process.env.NEXT_PUBLIC_SCOPES || ""],
 };
-
 
 export const msalInstance = new PublicClientApplication(msalConfig);

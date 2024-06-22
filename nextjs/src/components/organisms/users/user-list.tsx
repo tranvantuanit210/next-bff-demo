@@ -25,6 +25,7 @@ import UserDialog from "./user-dialog";
 import UserDialogConfirm from "./user-dialog-confirm";
 import { clientToken } from "@/utils/http";
 import { useRouter } from "next/navigation";
+import { path } from "@/constants/path";
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -142,7 +143,7 @@ export function UserList({ data }: { data: User[] }) {
   });
 
   const handleSeenDetails = (id: string) => {
-    router.push(`/users/${id}`);
+    router.push(`${path.users}/${id}`);
   };
 
   return (

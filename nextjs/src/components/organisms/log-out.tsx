@@ -8,6 +8,7 @@ import { useMsal } from "@azure/msal-react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import authBffServices from "@/app/(app)/(auth)/services/auth.bff.service";
+import { path } from "@/constants/path";
 
 export interface LogoutProps {}
 
@@ -16,18 +17,19 @@ export default function Logout(props: LogoutProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
   const handleLogout = () => {
     setIsLoading(true);
     instance
-      .logoutPopup(authScopes as any)
-      .then(async (data) => {
+      .logoutPopup({
+        account: instance.getActiveAccount(),
+      })
+      .then(async () => {
         const res = await authBffServices.logout();
         toast({
           title: "Success",
           description: res.message,
         });
-        router.push("/login");
+        router.push(path.login);
       })
       .catch((e) => {
         console.log(e);
